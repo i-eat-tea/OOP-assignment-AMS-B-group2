@@ -30,7 +30,7 @@ def customer_login_flow(bank):
             customer = bank.get_customer(customer_id)
             
             if customer.is_locked:
-                print("✗ Account is locked! Contact employee for unlock.")
+                print("Account is locked! Contact employee for unlock.")
                 input("\nPress Enter to return to main menu...")
                 return
             
@@ -43,14 +43,14 @@ def customer_login_flow(bank):
             else:
                 attempts += 1
                 remaining = 3 - attempts
-                print(f"✗ Invalid PIN. {remaining} attempt(s) remaining.")
+                print(f"Invalid PIN. {remaining} attempt(s) remaining.")
                 
         except Exception as e:
-            print(f"✗ Error: {e}")
+            print(f"Error: {e}")
             break
     
     if attempts >= 3:
-        print("✗ Too many failed attempts. Account may be locked.")
+        print("Too many failed attempts. Account may be locked.")
     input("\nPress Enter to return to main menu...")
 
 def employee_login_flow(bank):
@@ -71,9 +71,9 @@ def employee_login_flow(bank):
         else:
             attempts += 1
             remaining = 3 - attempts
-            print(f"✗ Invalid PIN. {remaining} attempt(s) remaining.")
+            print(f"Invalid PIN. {remaining} attempt(s) remaining.")
     
-    print("✗ Too many failed attempts. Access denied.")
+    print("Too many failed attempts. Access denied.")
     input("\nPress Enter to return to main menu...")
 
 def sign_up_flow(bank):
@@ -111,7 +111,7 @@ def sign_up_flow(bank):
             create_account_flow(bank, customer)
             
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
     
     input("\nPress Enter to return to main menu...")
 
@@ -147,13 +147,13 @@ def customer_menu(bank, customer):
             print(f"\n✓ Logged out from {customer.name}")
             break
         else:
-            print("✗ Invalid choice!")
+            print("Invalid choice!")
 
 def select_account(customer):
     """Let customer select from their accounts"""
     
     if not customer.accounts:
-        print("\n✗ You have no accounts. Create one first!")
+        print("\nYou have no accounts. Create one first!")
         return None
     
     print("\nYour Accounts:")
@@ -166,10 +166,10 @@ def select_account(customer):
         if 1 <= choice <= len(customer.accounts):
             return customer.accounts[choice-1]
         else:
-            print("✗ Invalid choice!")
+            print("Invalid choice!")
             return None
     except ValueError:
-        print("✗ Please enter a number!")
+        print("Please enter a number!")
         return None
 
 def account_operations(bank, customer, account):
@@ -201,7 +201,7 @@ def account_operations(bank, customer, account):
         elif choice == "5":
             break
         else:
-            print("✗ Invalid choice!")
+            print("Invalid choice!")
 
 def employee_menu(bank):
     """Menu for authenticated employees"""
@@ -231,7 +231,7 @@ def employee_menu(bank):
             print("\n✓ Employee logged out")
             break
         else:
-            print("✗ Invalid choice!")
+            print("Invalid choice!")
 
 def create_account_flow(bank, customer):
     """Create a new account for a customer"""
@@ -250,10 +250,10 @@ def create_account_flow(bank, customer):
         if initial_input:
             initial_balance = float(initial_input)
             if initial_balance < 0:
-                print("✗ Cannot deposit negative amount!")
+                print("Cannot deposit negative amount!")
                 return
     except ValueError:
-        print("✗ Invalid amount! Using $0")
+        print("Invalid amount! Using $0")
     
     try:
         if choice == "1":
@@ -275,9 +275,9 @@ def create_account_flow(bank, customer):
             print(f"\n✓ Checking Account created!")
             print(f"  Account #: {account.account_number}")
         else:
-            print("✗ Invalid choice!")
+            print("Invalid choice!")
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def deposit_flow(account):
     """Handle deposit operation"""
@@ -285,15 +285,15 @@ def deposit_flow(account):
     try:
         amount = float(input("\nDeposit amount: $").strip())
         if amount <= 0:
-            print("✗ Amount must be positive!")
+            print("Amount must be positive!")
             return
         
         account.deposit(amount)
-        print(f"✓ Deposit successful! New balance: ${account.balance:.2f}")
+        print(f" Deposit successful! New balance: ${account.balance:.2f}")
     except ValueError:
-        print("✗ Invalid amount!")
+        print("Invalid amount!")
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def withdraw_flow(account):
     """Handle withdrawal with PIN confirmation"""
@@ -302,16 +302,16 @@ def withdraw_flow(account):
         amount = float(input("Withdrawal amount: $").strip())
         pin = getpass.getpass("Enter PIN to confirm withdrawal: ")
         if amount <= 0:
-            print("✗ Amount must be positive!")
+            print("Amount must be positive!")
             return
         account.withdraw(amount, pin)
-        print(f"✓ Withdrawal successful! New balance: ${account.balance:.2f}")
+        print(f" Withdrawal successful! New balance: ${account.balance:.2f}")
     except InvalidPINError:
-        print("✗ Invalid PIN! Withdrawal cancelled.")
+        print("Invalid PIN! Withdrawal cancelled.")
     except ValueError:
-        print("✗ Invalid amount!")
+        print("Invalid amount!")
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def transfer_flow(bank, from_account):
     """Handle transfer between accounts"""
@@ -323,22 +323,22 @@ def transfer_flow(bank, from_account):
         amount = float(input("Transfer amount: $").strip())
         
         if amount <= 0:
-            print("✗ Amount must be positive!")
+            print("Amount must be positive!")
             return
         
         pin = getpass.getpass("Enter PIN to confirm transfer: ")
         
         # Fixed: Pass PIN to bank.transfer()
         bank.transfer(from_account.account_number, to_acc_num, amount, pin)
-        print(f"✓ Transfer successful!")
+        print(f" Transfer successful!")
         print(f"  Your new balance: ${from_account.balance:.2f}")
         
     except (InvalidPINError, InsufficientFundsError) as e:
-        print(f"✗ {e}")
+        print(f"{e}")
     except ValueError:
-        print("✗ Invalid amount!")
+        print("Invalid amount!")
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def reset_pin_flow(customer):
     """Reset customer PIN"""
@@ -351,7 +351,7 @@ def reset_pin_flow(customer):
     
     try:
         if not customer.verify_pin(old_pin):
-            print("✗ Current PIN is incorrect!")
+            print("Current PIN is incorrect!")
             return
         
         while True:
@@ -363,16 +363,16 @@ def reset_pin_flow(customer):
             new_pin2 = getpass.getpass("Confirm new PIN: ")
             if new_pin1 == new_pin2:
                 if customer.reset_pin(old_pin, new_pin1):
-                    print("✓ PIN reset successful!")
+                    print(" PIN reset successful!")
                     break
                 else:
-                    print("✗ PIN reset failed!")
+                    print("PIN reset failed!")
                     break
             else:
                 print("PINs don't match!")
                 
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def view_customer_summary(customer):
     """Display customer summary"""
@@ -382,7 +382,7 @@ def view_customer_summary(customer):
     print("="*50)
     print(f"Customer ID: {customer.customer_id}")
     print(f"Email: {customer.email}")
-    print(f"Status: {'LOCKED 🔒' if customer.is_locked else 'ACTIVE ✓'}")
+    print(f"Status: {'LOCKED 🔒' if customer.is_locked else 'ACTIVE '}")
     print(f"Total Balance: ${customer.get_total_balance():.2f}")
     
     if customer.accounts:
@@ -428,7 +428,7 @@ def view_statement(account):
             print("\nNo transactions yet.")
             
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def view_account_statement_employee(bank):
     """Employee can view any account statement"""
@@ -439,7 +439,7 @@ def view_account_statement_employee(bank):
         account = bank.get_account(account_num)
         view_statement(account)
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 def apply_monthly_updates(bank):
     """Apply monthly interest/charges"""
@@ -447,9 +447,9 @@ def apply_monthly_updates(bank):
     confirm = input("\nApply monthly updates to ALL accounts? (yes/no): ").strip().lower()
     if confirm in ['yes', 'y']:
         bank.apply_monthly_updates()
-        print("✓ Monthly updates applied to all accounts.")
+        print(" Monthly updates applied to all accounts.")
     else:
-        print("✗ Monthly updates cancelled.")
+        print("Monthly updates cancelled.")
 
 def view_bank_summary(bank):
     """Display bank-wide summary"""
@@ -480,11 +480,11 @@ def unlock_account_flow(bank):
         if customer.is_locked:
             admin_key = getpass.getpass("Enter Admin Key: ")
             if customer.unlock_account(admin_key):
-                print(f"✓ Account for {customer.name} unlocked!")
+                print(f" Account for {customer.name} unlocked!")
             else:
-                print("✗ Invalid admin key!")
+                print("Invalid admin key!")
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"Error: {e}")
 
 # ==================== MAIN FUNCTION ====================
 
@@ -515,7 +515,7 @@ def interactive_main():
             print("\nThank you for using the Secure Banking System. Goodbye!")
             break
         else:
-            print("✗ Invalid choice!")
+            print("Invalid choice!")
 
 # ==================== RUN THE SYSTEM ====================
 

@@ -1,5 +1,5 @@
 """
-Developer menu for quick testing
+Developer menu for comprehensive testing
 """
 import sys
 import os
@@ -9,43 +9,47 @@ from test import *
 from main import interactive_main
 
 def dev_menu():
-    """Developer menu for testing"""
+    """Developer menu for comprehensive testing"""
     bank = None
     
     while True:
         print("\n" + "="*60)
-        print("DEVELOPER TEST MENU")
+        print("DEVELOPER TEST MENU - COMPREHENSIVE TESTING")
         print("="*60)
-        print("1. Quick Test (basic functionality)")
-        print("2. Create Demo Bank (pre-populated)")
-        print("3. Stress Test (many customers)")
-        print("4. Run Normal Interactive System")
-        print("5. Reset Bank")
+        print("1. Run Comprehensive Test (all features)")
+        print("2. Quick Test (basic functionality)")
+        print("3. Create Demo Bank (pre-populated for manual testing)")
+        print("4. Test Exception Handling")
+        print("5. Run Normal Interactive System")
         print("6. Exit")
         print("-"*60)
         
         choice = input("\nEnter choice (1-6): ").strip()
         
         if choice == "1":
-            bank = quick_test()
+            print("\nStarting comprehensive test...")
+            bank = run_comprehensive_test()
+            input("\nPress Enter to continue...")
         elif choice == "2":
-            bank = create_demo_bank()
+            print("\nStarting quick test...")
+            bank = quick_test()
+            input("\nPress Enter to continue...")
         elif choice == "3":
-            try:
-                num = int(input("Number of customers (default 10): ") or "10")
-                bank = stress_test(num)
-            except ValueError:
-                print("Invalid number!")
+            print("\nCreating demo bank...")
+            bank = create_demo_bank()
+            input("\nPress Enter to continue...")
         elif choice == "4":
-            interactive_main()
+            print("\nTesting exception handling...")
+            test_all_exceptions()
+            input("\nPress Enter to continue...")
         elif choice == "5":
-            bank = None
-            print("Bank reset. Create a new one.")
+            print("\nLaunching interactive system...")
+            interactive_main()
         elif choice == "6":
-            print("Goodbye!")
+            print("\nGoodbye!")
             break
         else:
-            print("Invalid choice!")
+            print("Invalid choice! Please enter 1-6.")
 
 if __name__ == "__main__":
     dev_menu()
